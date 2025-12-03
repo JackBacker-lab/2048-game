@@ -28,20 +28,21 @@ class Game:
 
     def can_move(self) -> bool:
         """Checks can you do at least one move"""
-        # If there is any empty cells
-        if any(0 in row for row in self.grid):
-            return True
 
-        # If you can join tiles vertically
         for y in range(self.size):
-            for x in range(self.size - 1):
-                if self.grid[y][x] == self.grid[y][x + 1]:
+            for x in range(self.size):
+                cell = self.grid[y][x];
+
+                # If there is any empty cells
+                if cell == 0:
                     return True
 
-        # If you can join tiles horizontally
-        for y in range(self.size - 1):
-            for x in range(self.size):
-                if self.grid[y][x] == self.grid[y + 1][x]:
+                # If you can join tiles vertically
+                elif x + 1 < self.size and cell == self.grid[y][x + 1]:
+                    return True
+
+                # If you can join tiles horizontally
+                elif y + 1 < self.size and cell == self.grid[y + 1][x]:
                     return True
 
         return False
