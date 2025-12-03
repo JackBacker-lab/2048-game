@@ -64,28 +64,27 @@ class Game:
         Executes tile compression, join, repeated compression,
         realizing move left mechanic
         """
-        new_grid = []
 
-        for row in self.grid:
-            # 1. Remove zeros (compression)
+        for y in range(self.size):
+            row = self.grid[y]
+
+            # 1. Join neighbour cells
+            for x in range(1, self.size):
+                if row[x] == 0:
+                    row[x] = row[x - 1]
+                    row[x - 1] = 0
+
+                elif row[x] == row[x - 1]:
+                    row[x - 1] = row[x] * 2
+                    row[x] = 0
+
+            # 2. Remove zeros (compression)
             row = [el for el in row if el != 0]
 
-            # 2. Join neighbour cells
-            for i in range(len(row) - 1):
-                if row[i] == row[i + 1] != 0:
-                    row[i] *= 2
-                    row[i + 1] = 0
+            # 3. Add missing zeros on the right
+            row += [0] * (self.size - len(row))
 
-            # 3. Compress again
-            row = [el for el in row if el != 0]
-
-            # 4. Add missing zeros on the right
-            while len(row) < self.size:
-                row.append(0)
-
-            new_grid.append(row)
-
-        self.grid = new_grid
+            self.grid[y] = row
 
     # ---------------------------------------------------------
     # Rotations (used for UP/DOWN moves)
