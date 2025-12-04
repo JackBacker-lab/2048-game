@@ -28,20 +28,21 @@ class Game:
 
     def can_move(self) -> bool:
         """Checks can you do at least one move"""
-        # If there is any empty cells
-        if any(0 in row for row in self.grid):
-            return True
 
-        # If you can join tiles vertically
         for y in range(self.size):
-            for x in range(self.size - 1):
-                if self.grid[y][x] == self.grid[y][x + 1]:
+            for x in range(self.size):
+                cell = self.grid[y][x];
+
+                # If there is any empty cells
+                if cell == 0:
                     return True
 
-        # If you can join tiles horizontally
-        for y in range(self.size - 1):
-            for x in range(self.size):
-                if self.grid[y][x] == self.grid[y + 1][x]:
+                # If you can join tiles vertically
+                elif x + 1 < self.size and cell == self.grid[y][x + 1]:
+                    return True
+
+                # If you can join tiles horizontally
+                elif y + 1 < self.size and cell == self.grid[y + 1][x]:
                     return True
 
         return False
@@ -63,28 +64,27 @@ class Game:
         Executes tile compression, join, repeated compression,
         realizing move left mechanic
         """
-        new_grid = []
 
-        for row in self.grid:
-            # 1. Remove zeros (compression)
+        for y in range(self.size):
+            row = self.grid[y]
+
+            # 1. Join neighbour cells
+            for x in range(1, self.size):
+                if row[x] == 0:
+                    row[x] = row[x - 1]
+                    row[x - 1] = 0
+
+                elif row[x] == row[x - 1]:
+                    row[x - 1] = row[x] * 2
+                    row[x] = 0
+
+            # 2. Remove zeros (compression)
             row = [el for el in row if el != 0]
 
-            # 2. Join neighbour cells
-            for i in range(len(row) - 1):
-                if row[i] == row[i + 1] != 0:
-                    row[i] *= 2
-                    row[i + 1] = 0
+            # 3. Add missing zeros on the right
+            row += [0] * (self.size - len(row))
 
-            # 3. Compress again
-            row = [el for el in row if el != 0]
-
-            # 4. Add missing zeros on the right
-            while len(row) < self.size:
-                row.append(0)
-
-            new_grid.append(row)
-
-        self.grid = new_grid
+            self.grid[y] = row
 
     # ---------------------------------------------------------
     # Rotations (used for UP/DOWN moves)
