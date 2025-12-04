@@ -1,22 +1,27 @@
 # 2048 Game (Python + Pygame)
 
-Учебная реализация игры 2048 на Python и Pygame. Проект находится в активной разработке.
-Цель — создать плавную анимацию, удобный интерфейс и расширяемую архитектуру.
+## English
+
+Educational implementation of the 2048 game using Python and Pygame. Project is in active development.
+The goal is to create smooth animations, a user-friendly interface, and an extensible architecture.
 
 ## Preview
-<img width="612" height="777" alt="image_2025-12-04_19-52-27" src="https://github.com/user-attachments/assets/e7234317-090a-408b-bd06-90810333958b" />
 
+![2048 game preview](https://github.com/user-attachments/assets/e7234317-090a-408b-bd06-90810333958b)
 
 ## Status
-На данный момент реализовано:
-- базовый игровой цикл;
-- сетка 4×4;
-- движения плиток.
 
-В разработке:
-- анимации сдвига;
-- меню;
-- система рекордов.
+**Implemented:**
+
+* basic game loop
+* 4×4 grid
+* tile movements
+
+**In progress:**
+
+* animations
+* menu
+* score system
 
 ## Installation & Run
 
@@ -28,16 +33,71 @@ python main.py
 ```
 
 ## Tech Stack
-- Python 3
-- Pygame
+
+* Python 3
+* Pygame
 
 ## Roadmap
-- [ ] Анимация движения плиток
-- [ ] Главное меню
-- [ ] Настройки сложности
-- [ ] Эффекты переходов
-- [ ] Звук
-- [ ] Сохранение результатов
+
+* [ ] Tile animations
+* [ ] Main menu
+* [ ] Difficulty settings
+* [ ] Transition effects
+* [ ] Sound
+* [ ] Saving results
 
 ## License
-Будет добавлено позже
+
+Will be added later (likely MIT)
+
+---
+
+# Русский
+
+Учебная реализация игры 2048 на Python и Pygame. Проект находится в активной разработке.
+Цель — создать плавную анимацию, удобный интерфейс и расширяемую архитектуру.
+
+## Preview
+
+![Превью 2048](https://github.com/user-attachments/assets/e7234317-090a-408b-bd06-90810333958b)
+
+## Статус
+
+**Реализовано:**
+
+* базовый игровой цикл
+* сетка 4×4
+* движение плиток
+
+**В разработке:**
+
+* анимации
+* меню
+* система рекордов
+
+## Установка и запуск
+
+```bash
+git clone https://github.com/JackBacker-lab/2048-game
+cd 2048-game
+pip install -r requirements.txt
+python main.py
+```
+
+## Технологии
+
+* Python 3
+* Pygame
+
+## План развития
+
+* [ ] Анимация движения плиток
+* [ ] Главное меню
+* [ ] Настройки сложности
+* [ ] Эффекты переходов
+* [ ] Звук
+* [ ] Сохранение результатов
+
+## Лицензия
+
+Будет добавлена позже (вероятно MIT)
