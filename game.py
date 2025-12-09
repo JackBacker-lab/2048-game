@@ -1,127 +1,182 @@
 import random
+import copy
 from typing import List
 
 
 class Game:
     """
-    Contains only the game logic: interaction with game grid List[List[int]]
+    Encapsulates only the core 2048 game logic.
+    Stores and updates the numerical game grid (List[List[int]]).
     """
     
     def __init__(self, size: int = 4):
+        """
+        :param size: Grid dimension (size x size)
+        """
         self.size = size
         self.grid: List[List[int]] = [[0] * size for _ in range(size)]
         self.running = True
 
-        # Starting tile
-        self.insert_new_tile()
-
-    def insert_new_tile(self):
-        """Creates new tile (2 or 4) in random empty cell"""
+    def insert_new_tile(self) -> tuple[int, int, int]:
+        """
+        Creates new tile (2 or 4) in random empty cell.
+        Returns tuple: (value, row, col)
+        """
         empty_cells = [
             (i, j)
             for i in range(self.size)
             for j in range(self.size)
             if self.grid[i][j] == 0
         ]
-        x, y = random.choice(empty_cells)
-        self.grid[x][y] = 2 if random.random() < 0.75 else 4
+        y, x = random.choice(empty_cells)
+        self.grid[y][x] = 2 if random.random() < 0.75 else 4
+        return (self.grid[y][x], y, x)
 
     def can_move(self) -> bool:
-        """Checks can you do at least one move"""
-        # If there is any empty cells
+        """True if at least one move is possible."""
+        # Empty space → move possible
         if any(0 in row for row in self.grid):
             return True
 
-        # If you can join tiles vertically
-        for y in range(self.size):
-            for x in range(self.size - 1):
-                if self.grid[y][x] == self.grid[y][x + 1]:
+        # Adjacent equal tiles horizontally or vertically
+        for r in range(self.size):
+            for c in range(self.size):
+                if c + 1 < self.size and self.grid[r][c] == self.grid[r][c + 1]:
                     return True
-
-        # If you can join tiles horizontally
-        for y in range(self.size - 1):
-            for x in range(self.size):
-                if self.grid[y][x] == self.grid[y + 1][x]:
+                if r + 1 < self.size and self.grid[r][c] == self.grid[r + 1][c]:
                     return True
 
         return False
 
     def check_victory(self) -> bool:
-        """Victory is when there is a 2048 on the field"""
+        """True if 2048 tile exists."""
         return any(2048 in row for row in self.grid)
 
     def get_score(self) -> int:
-        """Score is max tile on the field"""
+        """Maximum tile."""
         return max(max(row) for row in self.grid)
 
     # ---------------------------------------------------------
     # Core mechanics
     # ---------------------------------------------------------
 
-    def shift_left(self):
+    def _shift_left(self):
         """
-        Executes tile compression, join, repeated compression,
-        realizing move left mechanic
+        Shift all tiles to the left with merge logic and compute
+        the bias (displacement) matrix for animation purposes.
+
+        Returns:
+            List[List[int]]: bias matrix.
         """
         new_grid = []
+        bias_matrix = []
 
         for row in self.grid:
-            # 1. Remove zeros (compression)
-            row = [el for el in row if el != 0]
+            # Extract non-zero tiles with original indices
+            tiles = [(idx, row[idx]) for idx in range(self.size) if row[idx] != 0]
 
-            # 2. Join neighbour cells
-            for i in range(len(row) - 1):
-                if row[i] == row[i + 1] != 0:
-                    row[i] *= 2
-                    row[i + 1] = 0
+            # Build merge groups: either a single tile (tuple)
+            # or a pair for merging (list of two tuples)
+            groups = []
+            i = 0
+            while i < len(tiles):
+                if i < len(tiles) - 1 and tiles[i][1] == tiles[i + 1][1]:
+                    groups.append([tiles[i], tiles[i + 1]])  # merge group
+                    i += 2
+                else:
+                    groups.append(tiles[i])                  # single tile
+                    i += 1
 
-            # 3. Compress again
-            row = [el for el in row if el != 0]
+            # Compute displacement for each original index
+            bias_row = [0] * self.size
+            for new_x, group in enumerate(groups):
+                if isinstance(group, tuple):
+                    old_x = group[0]
+                    bias_row[old_x] = old_x - new_x
+                else:  # merge group of two tiles
+                    for old_x, _ in group:
+                        bias_row[old_x] = old_x - new_x
 
-            # 4. Add missing zeros on the right
-            while len(row) < self.size:
-                row.append(0)
+            bias_matrix.append(bias_row)
 
-            new_grid.append(row)
+            # Merge tile values
+            compressed = [v for _, v in tiles]
+            result = []
+            i = 0
+            while i < len(compressed):
+                if i < len(compressed) - 1 and compressed[i] == compressed[i + 1]:
+                    result.append(compressed[i] * 2)
+                    i += 2
+                else:
+                    result.append(compressed[i])
+                    i += 1
+
+            # Fill remaining cells with zeros
+            result += [0] * (self.size - len(result))
+            new_grid.append(result)
+
 
         self.grid = new_grid
+        return bias_matrix
+
 
     # ---------------------------------------------------------
-    # Rotations (used for UP/DOWN moves)
+    # Matrix rotations (used for UP/DOWN moves)
     # ---------------------------------------------------------
 
-    def rotate_ccw(self, matrix):
+    @staticmethod
+    def rotate_ccw(matrix):
+        """Rotate matrix 90° CCW."""
         return [list(row) for row in zip(*matrix)][::-1]
 
-    def rotate_cw(self, matrix):
+    @staticmethod
+    def rotate_cw(matrix):
+        """Rotate matrix 90° CW."""
         return [list(row)[::-1] for row in zip(*matrix)]
 
     # ---------------------------------------------------------
-    # Moves (return True, if grid had changed)
+    # Moves
     # ---------------------------------------------------------
 
-    def move_left(self) -> bool:
-        old = self.grid
-        self.shift_left()
-        return old != self.grid
+    def move_left(self):
+        """Shift tiles to the left. Returns (changed: bool, bias_matrix: list)."""
+        old = copy.deepcopy(self.grid)
+        bias_matrix = self._shift_left()
+        changed = old != self.grid
+        return changed, bias_matrix
 
-    def move_right(self) -> bool:
-        old = self.grid
+    def move_right(self):
+        """Shift tiles to the right. Returns (changed: bool, bias_matrix: list)."""
+        old = copy.deepcopy(self.grid)
+        
         self.grid = [row[::-1] for row in self.grid]
-        self.shift_left()
+        bias_matrix = self._shift_left()
         self.grid = [row[::-1] for row in self.grid]
-        return old != self.grid
+        bias_matrix = [row[::-1] for row in bias_matrix]
+        
+        changed = old != self.grid
+        return changed, bias_matrix
 
-    def move_up(self) -> bool:
-        old = self.grid
+    def move_up(self):
+        """Shift tiles upward. Returns (changed: bool, bias_matrix: list)."""
+        old = copy.deepcopy(self.grid)
+        
         self.grid = self.rotate_ccw(self.grid)
-        self.shift_left()
+        bias_matrix = self._shift_left()
         self.grid = self.rotate_cw(self.grid)
-        return old != self.grid
+        bias_matrix = self.rotate_cw(bias_matrix)
+        
+        changed = old != self.grid
+        return changed, bias_matrix
 
-    def move_down(self) -> bool:
-        old = self.grid
+    def move_down(self):
+        """Shift tiles downward. Returns (changed: bool, bias_matrix: list)."""
+        old = copy.deepcopy(self.grid)
+        
         self.grid = self.rotate_cw(self.grid)
-        self.shift_left()
+        bias_matrix = self._shift_left()
         self.grid = self.rotate_ccw(self.grid)
-        return old != self.grid
+        bias_matrix = self.rotate_ccw(bias_matrix)
+        
+        changed = old != self.grid
+        return changed, bias_matrix

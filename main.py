@@ -19,35 +19,32 @@ FPS = 60
 
 def main():
     pygame.init()
+    pygame.display.set_caption("2048")
     clock = pygame.time.Clock()
 
     # Core modules
     game = Game(size=4)
     renderer = Renderer(game)
-    controller = Controller(game)
-
-    screen = renderer.create_window()
-    pygame.display.set_caption("2048")
+    controller = Controller(game, renderer)
 
     did_user_win = False
+    
     # Main loop
     while game.running:
+        dt = clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             did_user_win = controller.process_event(event)
-
-        renderer.render(screen)
-        pygame.display.update()
-
-        clock.tick(FPS)
+        renderer.render(dt)
 
     # Game over or victory screen
     if did_user_win:
-        renderer.render_victory(screen)
+        renderer.render_victory()
     else:
-        renderer.render_game_over(screen)
+        renderer.render_game_over()
+
     pygame.display.update()
     pygame.time.wait(5000)
     pygame.quit()
