@@ -17,12 +17,12 @@ The goal is to create smooth animations, a user-friendly interface, and an exten
 * basic game loop
 * 4×4 grid
 * tile movements
+* animations
+* score system
 
 **In progress:**
 
-* animations
 * menu
-* score system
 
 ## Installation & Run
 
@@ -70,12 +70,13 @@ Will be added later (likely MIT)
 * базовый игровой цикл
 * сетка 4×4
 * движение плиток
+* анимации
+* система рекордов
 
 **В разработке:**
 
-* анимации
+
 * меню
-* система рекордов
 
 ## Установка и запуск
 
