@@ -9,9 +9,9 @@ Architecture:
 import pygame
 import sys
 
-from game import Game
-from renderer import Renderer
-from controller import Controller
+from core.game import Game
+from rendering.renderer import Renderer
+from input.controller import Controller
 
 
 FPS = 60
@@ -22,32 +22,55 @@ def main():
     pygame.display.set_caption("2048")
     clock = pygame.time.Clock()
 
-    # Core modules
-    game = Game(size=4)
-    renderer = Renderer(game)
-    controller = Controller(game, renderer)
+    while True:
+        game = Game(size=4)
+        renderer = Renderer(game)
+        controller = Controller(game, renderer)
 
-    did_user_win = False
-    
-    # Main loop
-    while game.running:
-        dt = clock.tick(FPS)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            did_user_win = controller.process_event(event)
-        renderer.render(dt)
+        did_user_win = False
+        did_user_restart = False
+        waiting_for_restart = True
 
-    # Game over or victory screen
-    if did_user_win:
-        renderer.render_victory()
-    else:
-        renderer.render_game_over()
+        while game.running:
+            dt = clock.tick(FPS)
 
-    pygame.display.update()
-    pygame.time.wait(5000)
-    pygame.quit()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                result, did_user_restart = controller.process_event(event)
+                if result:
+                    did_user_win = True
+
+            renderer.render(dt)
+
+            if game.should_stop:
+                if not renderer.tile_manager.anim_manager.has_any():
+                    game.running = False
+
+        if did_user_win:
+            renderer.overlay.render_victory(renderer.WIDTH, renderer.HEIGHT)
+        elif not did_user_win and not did_user_restart:
+            renderer.overlay.render_game_over(renderer.WIDTH, renderer.HEIGHT)
+        else:
+            waiting_for_restart = False
+
+        pygame.display.update()
+        
+        while waiting_for_restart:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key in (pygame.K_RETURN, pygame.K_SPACE, pygame.K_r):
+                        waiting_for_restart = False
+                    elif event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        sys.exit()
+
+            clock.tick(30)
 
 
 if __name__ == "__main__":
