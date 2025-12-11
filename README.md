@@ -7,7 +7,8 @@ The goal is to create smooth animations, a user-friendly interface, and an exten
 
 ## Preview
 
-![2048 game preview](https://github.com/user-attachments/assets/e7234317-090a-408b-bd06-90810333958b)
+![2048 game preview]<img width="615" height="802" alt="image" src="https://github.com/user-attachments/assets/d9181d80-9b8b-450b-b05c-7517920ab191" />
+
 
 ## Status
 
@@ -59,7 +60,8 @@ Will be added later (likely MIT)
 
 ## Preview
 
-![Превью 2048](https://github.com/user-attachments/assets/e7234317-090a-408b-bd06-90810333958b)
+![Превью 2048]<img width="615" height="802" alt="image" src="https://github.com/user-attachments/assets/a0c3fbcb-66e3-4366-b62f-bfc33fe70228" />
+
 
 ## Статус
 
