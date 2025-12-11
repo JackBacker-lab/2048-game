@@ -1,0 +1,10 @@
+*.exe
+*.cmd
+*.bat
+*.bin
+\__pycache__
+dist/
+build/
+.vscode/
+*.log
+*.tmp
