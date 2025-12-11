@@ -35,16 +35,16 @@ class Game:
 
     def can_move(self) -> bool:
         """True if at least one move is possible."""
-        # Empty space → move possible
-        if any(0 in row for row in self.grid):
-            return True
-
+        
         # Adjacent equal tiles horizontally or vertically
         for r in range(self.size):
             for c in range(self.size):
-                if c + 1 < self.size and self.grid[r][c] == self.grid[r][c + 1]:
+                value = self.grid[r][c]
+                if value == 0:    # Empty space → move possible
                     return True
-                if r + 1 < self.size and self.grid[r][c] == self.grid[r + 1][c]:
+                if c + 1 < self.size and value == self.grid[r][c + 1]:
+                    return True
+                if r + 1 < self.size and value == self.grid[r + 1][c]:
                     return True
 
         return False
@@ -97,7 +97,7 @@ class Game:
                 if isinstance(group, tuple):
                     old_x = group[0]
                     bias_row[old_x] = old_x - new_x
-                else:  # merge group of two tiles
+                else:
                     merge_row[new_x] = 1
                     for old_x, _ in group:
                         bias_row[old_x] = old_x - new_x
