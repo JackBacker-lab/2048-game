@@ -49,7 +49,7 @@ python main.py
 
 ## License
 
-Will be added later (likely MIT)
+MIT License
 
 ---
 
@@ -103,4 +103,4 @@ python main.py
 
 ## Лицензия
 
-Будет добавлена позже (вероятно MIT)
+MIT License
