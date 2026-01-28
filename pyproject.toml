@@ -1,0 +1,61 @@
+[project]
+name = "2048"
+version = "0.0.1"
+description = "Educational implementation of the 2048 game"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "Jack Backer", email = "jackbacker90@tutamail.com" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Typing :: Typed",
+]
+license = "MIT"
+license-files = ["LICENSE"]
+
+dependencies = [
+  "pygame==2.6.1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==9.0.2",
+  "pytest-cov==7.0.0"
+]
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = [
+    "game",
+    "game.core",
+    "game.input",
+    "game.rendering",
+    "game.rendering.animations",
+    "game.rendering.components",
+    "game.rendering.tiles",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+fix = true
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.pytest.ini_options]
+log_cli = true
+log_cli_level = "INFO"
