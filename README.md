@@ -3,34 +3,24 @@
 ## English
 
 Educational implementation of the 2048 game using Python and Pygame. Project is in active development.
-The goal is to create smooth animations, a user-friendly interface, and an extensible architecture.
 
 ## Preview
 
 <img width="615" height="802" alt="image" src="https://github.com/user-attachments/assets/d9181d80-9b8b-450b-b05c-7517920ab191" />
 
 
-## Status
-
-**Implemented:**
-
-* basic game loop
-* 4×4 grid
-* tile movements
-* animations
-* score system
-
-**In progress:**
-
-* menu
-
 ## Installation & Run
 
 ```bash
 git clone https://github.com/JackBacker-lab/2048-game
 cd 2048-game
-pip install -r requirements.txt
-python main.py
+
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+pip install .
+
+python -m game.main
 ```
 
 ## Tech Stack
@@ -40,11 +30,10 @@ python main.py
 
 ## Roadmap
 
-* [ ] Tile animations
+* [x] Tile animations
+* [x] Transition effects
 * [ ] Main menu
 * [ ] Difficulty settings
-* [ ] Transition effects
-* [ ] Sound
 * [ ] Saving results
 
 ## License
@@ -56,35 +45,24 @@ MIT License
 # Русский
 
 Учебная реализация игры 2048 на Python и Pygame. Проект находится в активной разработке.
-Цель — создать плавную анимацию, удобный интерфейс и расширяемую архитектуру.
 
 ## Preview
 
 <img width="615" height="802" alt="image" src="https://github.com/user-attachments/assets/a0c3fbcb-66e3-4366-b62f-bfc33fe70228" />
 
 
-## Статус
-
-**Реализовано:**
-
-* базовый игровой цикл
-* сетка 4×4
-* движение плиток
-* анимации
-* система рекордов
-
-**В разработке:**
-
-
-* меню
-
 ## Установка и запуск
 
 ```bash
 git clone https://github.com/JackBacker-lab/2048-game
 cd 2048-game
-pip install -r requirements.txt
-python main.py
+
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+pip install .
+
+python -m game.main
 ```
 
 ## Технологии
@@ -94,11 +72,10 @@ python main.py
 
 ## План развития
 
-* [ ] Анимация движения плиток
+* [x] Анимация движения плиток
+* [x] Эффекты переходов
 * [ ] Главное меню
 * [ ] Настройки сложности
-* [ ] Эффекты переходов
-* [ ] Звук
 * [ ] Сохранение результатов
 
 ## Лицензия
