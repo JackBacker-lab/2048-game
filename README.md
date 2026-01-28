@@ -2,7 +2,10 @@
 
 ## English
 
-Educational implementation of the 2048 game using Python and Pygame. Project is in active development.
+An educational implementation of the 2048 game using Python and Pygame. The project is currently under active development.
+
+- [English](#english)
+- [Русский](#русский)
 
 ## Preview
 
@@ -22,6 +25,11 @@ pip install .
 
 python -m game.main
 ```
+
+## How to play
+
+Use the arrow keys to move the tiles. If two tiles with the same number collide while moving, they merge into a single tile with the total value of the two tiles that collided.
+The goal is to create a tile with the value 2048.
 
 ## Tech Stack
 
@@ -44,9 +52,9 @@ MIT License
 
 # Русский
 
-Учебная реализация игры 2048 на Python и Pygame. Проект находится в активной разработке.
+Учебная реализация игры 2048 на Python и Pygame. Проект находится в фазе активной разработки.
 
-## Preview
+## Скриншот
 
 <img width="615" height="802" alt="image" src="https://github.com/user-attachments/assets/a0c3fbcb-66e3-4366-b62f-bfc33fe70228" />
 
@@ -64,6 +72,11 @@ pip install .
 
 python -m game.main
 ```
+
+## Как играть
+
+Используйте стрелки на клавиатуре, чтобы двигать плитки. Если две плитки с одинаковым числом сталкиваются во время хода, они сливаются в одну плитку с суммарным значением.
+Цель — получить плитку со значением 2048.
 
 ## Технологии
 
